@@ -1,7 +1,9 @@
-(ns overtone.orchestra.cello)
+(ns overtone.orchestra.cello
+  (:use [overtone.live]))
 
 (def cello-dir "/Users/josephwilk/Workspace/music/samples/instruments/cello/wavs/")
-(def cello-samples (file-seq (clojure.java.io/file cello-dir)))
+(def cello-samples (remove nil? (map #(try (load-sample %)
+                                           (catch Exception e nil)) (file-seq (clojure.java.io/file cello-dir)))))
 
 (definst cello
   "length: 1, 1/2 1/15 1/25
