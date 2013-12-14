@@ -10,7 +10,7 @@ Intruments:
  * Cello
 
 
-```
+```clojure
 [overtone.orchestra "0.1.0-SNAPSHOT"]
 ```
 
