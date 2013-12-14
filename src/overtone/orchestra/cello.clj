@@ -1,7 +1,9 @@
 (ns overtone.orchestra.cello
   (:use [overtone.live]))
 
-(def cello-dir "/Users/josephwilk/Workspace/music/samples/instruments/cello/wavs/")
+;;wget http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip
+(def cello-dir "/Users/josephwilk/Workspace/music/samples/instruments/cello/wavs")
+
 (def cello-samples (remove nil? (map #(try (load-sample %)
                                            (catch Exception e nil)) (file-seq (clojure.java.io/file cello-dir)))))
 
@@ -9,40 +11,72 @@
   (let [[_ note duration] (re-find #"cello_([^_]+)_([^_]+)" name)]
     {:note (clojure.string/replace note #"s" "#") :duration duration}))
 
-(defn filter-for [files] (filter #(re-find #"1_forte_arco-normal" (:name %)) files))
+(defn filter-for [files length] (filter #(re-find (re-pattern (str "_" length "_forte_arco-normal")) (:name %)) files))
 
-(def cello-buffer-ids
+(defn cello-buffer-ids [samples]
   (apply merge
-         (map (fn [sample]
-                (println (->
-                          (file->note sample)
-                          :note
-                          match-note))
-                {(-> (file->note sample)
+         (map (fn [s]
+                {(-> (file->note s)
                      :note
                      match-note
                      :midi-note)
-                 (:id sample)})
-              (filter-for cello-samples))))
+                 (:id s)})
+              samples)))
+
+(def forte-arco-15  (cello-buffer-ids (filter-for cello-samples "15")))
+(def forte-arco-1   (cello-buffer-ids (filter-for cello-samples "1")))
+(def forte-arco-05  (cello-buffer-ids (filter-for cello-samples "05")))
+(def forte-arco-025 (cello-buffer-ids (filter-for cello-samples "025")))
 
 (defonce ^:private silent-buffer (buffer 0))
 
-(defonce index-buffer
-  (let [buf (buffer 90)]
+(defonce index-buffer-15
+  (let [buf (buffer 128)]
     (buffer-fill! buf (:id silent-buffer))
-    (doseq [[idx val] cello-buffer-ids]
-      (buffer-set! buf idx val))  buf))
+    (doseq [[idx val] forte-arco-15]
+      (buffer-set! buf idx val))
+    buf))
+
+(defonce index-buffer-1
+  (let [buf (buffer 128)]
+    (buffer-fill! buf (:id silent-buffer))
+    (doseq [[idx val]  forte-arco-1]
+      (buffer-set! buf idx val))
+    buf))
+
+(defonce index-buffer-05
+  (let [buf (buffer 128)]
+    (buffer-fill! buf (:id silent-buffer))
+    (doseq [[idx val] forte-arco-05]
+      (buffer-set! buf idx val))
+    buf))
+
+(defonce index-buffer-025
+  (let [buf (buffer 128)]
+    (buffer-fill! buf (:id silent-buffer))
+    (doseq [[idx val] forte-arco-025]
+      (buffer-set! buf idx val))
+    buf))
+
+(defonce length-buffer
+  (let [buf (buffer 4)]
+    (buffer-set! buf 0 (:id index-buffer-15))
+    (buffer-set! buf 1 (:id index-buffer-1))
+    (buffer-set! buf 2 (:id index-buffer-05))
+    (buffer-set! buf 3 (:id index-buffer-025))))
 
 (definst cello
-  "length: 1, 1/2 1/15 1/25
-   valid modes: * 0 forte-arco-normal
-                * 1 fortissimo-arco-normal
-                * 2 mezzo-piano-arco-normal
-                * 3 mezzo-piano-non-vibrato
-                * 4 pianissimo-arco-normal"
-  [note 60]
-  (let [buf (index:kr (:id index-buffer) note)]
-    (scaled-play-buf 2 buf :action FREE)))
+  [note 60 length 0 level 1 rate 1 loop? 0 attack 0 decay 0.5 sustain 1 release 0.1 curve -4 gate 1]
+  (let [l-buf (index:kr (:id length-buffer) length)
+        buf (index:kr l-buf note)
+        env (env-gen (adsr attack decay sustain release level curve)
+                     :gate gate
+                     :action FREE)]
+        (* env (scaled-play-buf 1 buf :level level :loop loop? :action FREE))))
 
-(cello)
-(sample-player (nth cello-samples 13))
+(comment
+  (cello :note 50 :length 0)
+  (cello :note 50 :length 1)
+  (cello :note 50 :length 2)
+  (cello :note 50 :length 3)
+  )
