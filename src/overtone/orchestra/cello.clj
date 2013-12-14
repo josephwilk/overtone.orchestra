@@ -1,7 +1,21 @@
 (ns overtone.orchestra.cello
+  "Supports:
+    * forte_arco-normal
+    * fortissimo_arco-normal
+    * mezzo-piano_arco-normal
+    * mezzo-piano_non-vibrato
+    * pianissimo_arco-normal
+
+    With lengths:
+    * 1.5
+    * 1
+    * 0.5
+    * 0.25
+
+    Samples: wget http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip
+  "
   (:use [overtone.live]))
 
-;;wget http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip
 (def cello-dir "/Users/josephwilk/Workspace/music/samples/instruments/cello/wavs")
 
 (def cello-samples (remove nil? (map #(try (load-sample %)
