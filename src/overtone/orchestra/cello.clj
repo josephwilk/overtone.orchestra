@@ -25,7 +25,7 @@
   (let [[_ note duration] (re-find #"cello_([^_]+)_([^_]+)" name)]
     {:note (clojure.string/replace note #"s" "#") :duration duration}))
 
-(defn filter-for [files length] (filter #(re-find (re-pattern (str "_" length "_forte_arco-normal")) (:name %)) files))
+(defn filter-for [files length type] (filter #(re-find (re-pattern (str "_" length "_" type)) (:name %)) files))
 
 (defn cello-buffer-ids [samples]
   (apply merge
@@ -37,10 +37,27 @@
                  (:id s)})
               samples)))
 
-(def forte-arco-15  (cello-buffer-ids (filter-for cello-samples "15")))
-(def forte-arco-1   (cello-buffer-ids (filter-for cello-samples "1")))
-(def forte-arco-05  (cello-buffer-ids (filter-for cello-samples "05")))
-(def forte-arco-025 (cello-buffer-ids (filter-for cello-samples "025")))
+(def forte-arco-15  (cello-buffer-ids (filter-for cello-samples "15"  "forte_arco-normal")))
+(def forte-arco-1   (cello-buffer-ids (filter-for cello-samples "1"   "forte_arco-normal")))
+(def forte-arco-05  (cello-buffer-ids (filter-for cello-samples "05"  "forte_arco-normal")))
+(def forte-arco-025 (cello-buffer-ids (filter-for cello-samples "025" "forte_arco-normal")))
+
+(def fortissimo_arco-15  (cello-buffer-ids (filter-for cello-samples "15"  "fortissimo_arco-normal")))
+(def fortissimo_arco-1   (cello-buffer-ids (filter-for cello-samples "1"   "fortissimo_arco-normal")))
+(def fortissimo_arco-05  (cello-buffer-ids (filter-for cello-samples "05"  "fortissimo_arco-normal")))
+(def fortissimo_arco-025 (cello-buffer-ids (filter-for cello-samples "025" "fortissimo_arco-normal")))
+
+(def mezzo-piano_arco-normal-15  (cello-buffer-ids (filter-for cello-samples "15"  "mezzo-piano_arco-normal")))
+(def mezzo-piano_arco-normal-1   (cello-buffer-ids (filter-for cello-samples "1"   "mezzo-piano_arco-normal")))
+(def mezzo-piano_arco-normal-05  (cello-buffer-ids (filter-for cello-samples "05"  "mezzo-piano_arco-normal")))
+(def mezzo-piano_arco-normal-025 (cello-buffer-ids (filter-for cello-samples "025" "mezzo-piano_arco-normal")))
+
+(def mezzo-piano_non-vibrato-1   (cello-buffer-ids (filter-for cello-samples "1"   "mezzo-piano_non-vibrato")))
+
+(def pianissimo_arco-normal-15  (cello-buffer-ids (filter-for cello-samples "15"  "pianissimo_arco-normal")))
+(def pianissimo_arco-normal-1   (cello-buffer-ids (filter-for cello-samples "1"   "pianissimo_arco-normal")))
+(def pianissimo_arco-normal-05  (cello-buffer-ids (filter-for cello-samples "05"  "pianissimo_arco-normal")))
+(def pianissimo_arco-normal-025 (cello-buffer-ids (filter-for cello-samples "025" "pianissimo_arco-normal")))
 
 (defonce ^:private silent-buffer (buffer 0))
 
