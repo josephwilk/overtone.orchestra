@@ -14,28 +14,14 @@
 
     Samples: http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip
   "
-  (:use [overtone.live]))
+  (:use [overtone.live])
+  (:require [overtone.orchestra.samples :as samples]))
 
-(def cello-dir (str (System/getProperty "user.home") "/.overtone/orchestra/cello/"))
-
-(def cello-samples (remove nil? (map #(try (load-sample %)
-                                           (catch Exception e nil)) (file-seq (clojure.java.io/file cello-dir)))))
-
-(defn file->note [{name :name}]
-  (let [[_ note duration] (re-find #"cello_([^_]+)_([^_]+)" name)]
-    {:note (clojure.string/replace note #"s" "#") :duration duration}))
+(def cello-samples (samples/load "cello"))
 
 (defn filter-for [files length type] (filter #(re-find (re-pattern (str "_" length "_" type)) (:name %)) files))
 
-(defn cello-buffer-ids [samples]
-  (apply merge
-         (map (fn [s]
-                {(-> (file->note s)
-                     :note
-                     match-note
-                     :midi-note)
-                 (:id s)})
-              samples)))
+(defn cello-buffer-ids [samples] (apply merge (map (fn [s] {(samples/sample->note s) (:id s)}) samples)))
 
 (def forte-arco-15  (cello-buffer-ids (filter-for cello-samples "15"  "forte_arco-normal")))
 (def forte-arco-1   (cello-buffer-ids (filter-for cello-samples "1"   "forte_arco-normal")))
