@@ -16,7 +16,7 @@
   "
   (:use [overtone.live]))
 
-(def cello-dir "~/.overtone/orchestra/cello")
+(def cello-dir (str (System/getProperty "user.home") "/.overtone/orchestra/cello/"))
 
 (def cello-samples (remove nil? (map #(try (load-sample %)
                                            (catch Exception e nil)) (file-seq (clojure.java.io/file cello-dir)))))
