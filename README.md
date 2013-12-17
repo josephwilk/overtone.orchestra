@@ -8,6 +8,7 @@
 Intruments:
 
  * Cello
+ * Oboe
 
 
 ## Installing samples
@@ -20,6 +21,10 @@ mkdir -p ~/.overtone/orchestra/cello && cd ~/.overtone/orchestra
 
 wget http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip
 unzip -d cello cello.zip && cd cello
+for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done
+
+wget http://www.philharmonia.co.uk/assets/audio/samples/oboe/oboe.zip
+unzip -d oboe oboe.zip && cd oboe
 for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done
 ```
 
