@@ -14,7 +14,7 @@ Intruments:
 
 Samples from the philharmonia orchestra have to be downloaded and converted to wavs.
 
-```
+```bash
 brew install ffmpeg
 mkdir -p ~/.overtone/orchestra/cello && cd ~/.overtone/orchestra
 
