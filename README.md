@@ -23,6 +23,9 @@ unzip -d cello cello.zip && cd cello
 for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done
 ```
 
+## Adding as a Dependency
+
+Add to your project.clj file:
 
 ```clojure
 [overtone.orchestra "0.1.0-SNAPSHOT"]
