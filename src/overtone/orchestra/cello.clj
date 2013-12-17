@@ -12,11 +12,11 @@
     * 0.5
     * 0.25
 
-    Samples: wget http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip
+    Samples: http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip
   "
   (:use [overtone.live]))
 
-(def cello-dir "/Users/josephwilk/Workspace/music/samples/instruments/cello/wavs")
+(def cello-dir "~/.overtone/orchestra/cello")
 
 (def cello-samples (remove nil? (map #(try (load-sample %)
                                            (catch Exception e nil)) (file-seq (clojure.java.io/file cello-dir)))))
