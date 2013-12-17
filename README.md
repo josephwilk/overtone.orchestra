@@ -12,8 +12,11 @@ Intruments:
 
 ## Installing samples
 
+Samples from the philharmonia orchestra have to be downloaded and converted to wavs.
+
 ```
 brew install ffmpeg
+mkdir -p ~/.overtone/orchestra/cello && cd ~/.overtone/orchestra
 
 wget http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip
 unzip cello.zip && cd cello
