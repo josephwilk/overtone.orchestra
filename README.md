@@ -19,7 +19,7 @@ brew install ffmpeg
 mkdir -p ~/.overtone/orchestra/cello && cd ~/.overtone/orchestra
 
 wget http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip
-unzip cello.zip && cd cello
+unzip -d cello cello.zip && cd cello
 for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done
 ```
 
