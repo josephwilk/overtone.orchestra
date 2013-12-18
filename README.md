@@ -5,10 +5,11 @@
      \___/|_|  \___|_| |_|\___||___/\__|_|  \__,_|
 
 
-Intruments:
+Instruments:
 
  * Cello
  * Oboe
+ * Double bass
 
 
 ## Installing samples
@@ -30,9 +31,7 @@ for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done
 rm *.mp3
 
 wget http://www.philharmonia.co.uk/assets/audio/samples/double%20bass/double%20bass.zip
-unzip -d "double-bass" "double bass.zip" && cd "double-bass"
-for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done
-rm *.mp3
+unzip -d "double-bass" "double bass.zip" && cd "double-bass" && for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done && rm *.mp3
 ```
 
 ## Adding as a Dependency
