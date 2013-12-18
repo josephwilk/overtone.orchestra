@@ -74,4 +74,17 @@
 (definst washboard [])
 (definst whip [])
 (definst wind-chimes [])
-(definst woodblock [])
+
+
+(defonce woodblock-sample (load-sample (str (s/percussion-dir "woodblock") "woodblock__025_mezzo-forte_struck-singly.wav")))
+(defonce woodblock-buffer (:id woodblock-sample))
+
+(definst woodblock
+  [level 1 rate 1 loop? 0 attack 0 decay 0.5 sustain 1 release 0.1 curve -4 gate 1]
+  (let [buf (index:kr woodblock-buffer 0)
+        env (env-gen (adsr attack decay sustain release level curve)
+                     :gate gate
+                     :action FREE)]
+    (* env (scaled-play-buf 1 buf :level level :loop loop? :action FREE))))
+
+(comment (woodblock)))
