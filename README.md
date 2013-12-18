@@ -21,14 +21,11 @@ brew install ffmpeg
 mkdir -p ~/.overtone/orchestra/cello && cd ~/.overtone/orchestra 
 cd ~/.overtone/orchestra/cello && cd ~/.overtone/orchestra
 
-wget http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip && unzip -d cello cello.zip && cd cello &&
-for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done && rm *.mp3
-wget http://www.philharmonia.co.uk/assets/audio/samples/oboe/oboe.zip && unzip -d oboe oboe.zip && cd oboe && for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done && rm *.mp3
+wget http://www.philharmonia.co.uk/assets/audio/samples/cello/cello.zip
+unzip -d cello cello.zip && cd cello && for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done && rm *.mp3
 
 wget http://www.philharmonia.co.uk/assets/audio/samples/oboe/oboe.zip
-unzip -d oboe oboe.zip && cd oboe
-for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done
-rm *.mp3
+unzip -d oboe oboe.zip && cd oboe && for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done && rm *.mp3
 
 wget http://www.philharmonia.co.uk/assets/audio/samples/double%20bass/double%20bass.zip
 unzip -d "double-bass" "double bass.zip" && cd "double-bass" && for f in *.mp3; do ffmpeg -i "$f" "${f%.mp3}.wav"; done && rm *.mp3
