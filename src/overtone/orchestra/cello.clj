@@ -17,70 +17,22 @@
   (:use [overtone.live])
   (:require [overtone.orchestra.samples :as samples]))
 
-(def cello-samples (samples/load "cello"))
+(defonce cello-samples (samples/load "cello"))
 
-(defn filter-for [files length type] (filter #(re-find (re-pattern (str "_" length "_" type)) (:name %)) files))
+(defonce forte-arco              (samples/samples-style cello-samples "forte_arco-normal"))
+(defonce fortissimo_arco         (samples/samples-style cello-samples "fortissimo_arco-normal"))
+(defonce mezzo-piano_arco-normal (samples/samples-style cello-samples "mezzo-piano_arco-normal"))
+(defonce mezzo-piano_non-vibrato (samples/samples-style cello-samples "mezzo-piano_non-vibrato"))
+(defonce pianissimo_arco-normal  (samples/samples-style cello-samples "pianissimo_arco-normal"))
 
-(defn cello-buffer-ids [samples] (apply merge (map (fn [s] {(samples/sample->note s) (:id s)}) samples)))
-
-(def forte-arco-15  (cello-buffer-ids (filter-for cello-samples "15"  "forte_arco-normal")))
-(def forte-arco-1   (cello-buffer-ids (filter-for cello-samples "1"   "forte_arco-normal")))
-(def forte-arco-05  (cello-buffer-ids (filter-for cello-samples "05"  "forte_arco-normal")))
-(def forte-arco-025 (cello-buffer-ids (filter-for cello-samples "025" "forte_arco-normal")))
-
-(def fortissimo_arco-15  (cello-buffer-ids (filter-for cello-samples "15"  "fortissimo_arco-normal")))
-(def fortissimo_arco-1   (cello-buffer-ids (filter-for cello-samples "1"   "fortissimo_arco-normal")))
-(def fortissimo_arco-05  (cello-buffer-ids (filter-for cello-samples "05"  "fortissimo_arco-normal")))
-(def fortissimo_arco-025 (cello-buffer-ids (filter-for cello-samples "025" "fortissimo_arco-normal")))
-
-(def mezzo-piano_arco-normal-15  (cello-buffer-ids (filter-for cello-samples "15"  "mezzo-piano_arco-normal")))
-(def mezzo-piano_arco-normal-1   (cello-buffer-ids (filter-for cello-samples "1"   "mezzo-piano_arco-normal")))
-(def mezzo-piano_arco-normal-05  (cello-buffer-ids (filter-for cello-samples "05"  "mezzo-piano_arco-normal")))
-(def mezzo-piano_arco-normal-025 (cello-buffer-ids (filter-for cello-samples "025" "mezzo-piano_arco-normal")))
-
-(def mezzo-piano_non-vibrato-1   (cello-buffer-ids (filter-for cello-samples "1"   "mezzo-piano_non-vibrato")))
-
-(def pianissimo_arco-normal-15  (cello-buffer-ids (filter-for cello-samples "15"  "pianissimo_arco-normal")))
-(def pianissimo_arco-normal-1   (cello-buffer-ids (filter-for cello-samples "1"   "pianissimo_arco-normal")))
-(def pianissimo_arco-normal-05  (cello-buffer-ids (filter-for cello-samples "05"  "pianissimo_arco-normal")))
-(def pianissimo_arco-normal-025 (cello-buffer-ids (filter-for cello-samples "025" "pianissimo_arco-normal")))
-
-(defonce ^:private silent-buffer (buffer 0))
-
-(defonce index-buffer-15
-  (let [buf (buffer 128)]
-    (buffer-fill! buf (:id silent-buffer))
-    (doseq [[idx val] forte-arco-15]
-      (buffer-set! buf idx val))
-    buf))
-
-(defonce index-buffer-1
-  (let [buf (buffer 128)]
-    (buffer-fill! buf (:id silent-buffer))
-    (doseq [[idx val]  forte-arco-1]
-      (buffer-set! buf idx val))
-    buf))
-
-(defonce index-buffer-05
-  (let [buf (buffer 128)]
-    (buffer-fill! buf (:id silent-buffer))
-    (doseq [[idx val] forte-arco-05]
-      (buffer-set! buf idx val))
-    buf))
-
-(defonce index-buffer-025
-  (let [buf (buffer 128)]
-    (buffer-fill! buf (:id silent-buffer))
-    (doseq [[idx val] forte-arco-025]
-      (buffer-set! buf idx val))
-    buf))
+(defonce forte-arco-buffers (samples/buffer-for forte-arco))
 
 (defonce length-buffer
   (let [buf (buffer 4)]
-    (buffer-set! buf 0 (:id index-buffer-15))
-    (buffer-set! buf 1 (:id index-buffer-1))
-    (buffer-set! buf 2 (:id index-buffer-05))
-    (buffer-set! buf 3 (:id index-buffer-025))))
+    (buffer-set! buf 0 (-> forte-arco-buffers :15 :id))
+    (buffer-set! buf 1 (-> forte-arco-buffers :1 :id))
+    (buffer-set! buf 2 (-> forte-arco-buffers :05 :id))
+    (buffer-set! buf 3 (-> forte-arco-buffers :025 :id))))
 
 (definst cello
   [note 60 length 0 level 1 rate 1 loop? 0 attack 0 decay 0.5 sustain 1 release 0.1 curve -4 gate 1]
@@ -95,5 +47,4 @@
   (cello :note 50 :length 0)
   (cello :note 50 :length 1)
   (cello :note 50 :length 2)
-  (cello :note 50 :length 3)
-  )
+  (cello :note 50 :length 3))
