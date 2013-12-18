@@ -15,6 +15,7 @@ Instruments:
 Percussion
 
  * Chinese cymbal
+ * Chinese hand cymbal
 
 ## Installing samples
 
