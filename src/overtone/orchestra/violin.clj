@@ -3,12 +3,12 @@
   (:use [overtone.live])
   (:require [overtone.orchestra.samples :as samples]))
 
-(defonce oboe-samples (samples/load "violin"))
+(defonce samples (samples/load "violin"))
 
-(defonce forte-normal       (samples/samples-style oboe-samples "forte_normal"))
-(defonce fortissimo-normal  (samples/samples-style oboe-samples "fortisssimo_normal"))
-(defonce mezzo-forte-normal (samples/samples-style oboe-samples "mezzo-forte_normal"))
-(defonce piano-normal       (samples/samples-style oboe-samples "piano_normal"))
+(defonce forte-normal       (samples/samples-style samples "forte_normal"))
+(defonce fortissimo-normal  (samples/samples-style samples "fortisssimo_normal"))
+(defonce mezzo-forte-normal (samples/samples-style samples "mezzo-forte_normal"))
+(defonce piano-normal       (samples/samples-style samples "piano_normal"))
 
 (defonce forte-normal-buffers (samples/buffer-for forte-normal))
 

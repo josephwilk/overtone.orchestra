@@ -1,7 +1,11 @@
 (ns overtone.orchestra.samples
-  (:use overtone.live))
+  (:use [overtone.live]
+        [overtone.helpers.file :only [glob canonical-path resolve-tilde-path mk-path]]))
 
 (defonce ^:private silent-buffer (buffer 0))
+
+(defn percussion-dir [instrument]
+  (str (System/getProperty "user.home") "/.overtone/orchestra/percussion/" instrument "/"))
 
 (defn- instrument-dir [instrument]
   (str (System/getProperty "user.home") "/.overtone/orchestra/" instrument "/"))
@@ -9,6 +13,18 @@
 (defn load [instrument]
   (remove nil? (map #(try (load-sample %)
                           (catch Exception e nil)) (file-seq (clojure.java.io/file (instrument-dir instrument))))))
+
+(defn load-samples-from-dir
+  "Overtones version is broken"
+  [& path-glob]
+  (let [path  (apply mk-path path-glob)
+        path  (resolve-tilde-path path)
+        files (glob path)]
+    (doall
+     (map (fn [file]
+            (let [path (.getAbsolutePath file)]
+              (load-sample path)))
+          files))))
 
 (defn- sample->note [sample]
   (let [name (:name sample)
